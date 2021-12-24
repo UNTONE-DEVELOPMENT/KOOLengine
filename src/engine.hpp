@@ -3,6 +3,8 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "phys.hpp"
+#include <vector>
 
 class Engine
 {
@@ -16,5 +18,6 @@ public:
     static void DrawRect(SDL_Rect r);
     static void Begin(std::string programName, int WindowWidth, int WindowHeight);
     static void Tick();
+    static void MainLoop();
     static int End(int code);
 };

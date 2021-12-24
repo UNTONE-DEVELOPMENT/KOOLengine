@@ -2,6 +2,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "engine.hpp"
+#include "phys.hpp"
+#include <vector>
 
 SDL_Renderer* Engine::Renderer;
 SDL_Window* Engine::CurrentWindow;
@@ -16,6 +18,22 @@ void Engine::Begin(std::string programName, int WindowWidth, int WindowHeight)
     IMG_Init(IMG_INIT_PNG);
     CurrentWindow = SDL_CreateWindow(programName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WindowWidth, WindowHeight, 0);
     Renderer = SDL_CreateRenderer(CurrentWindow, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+}
+
+void Engine::MainLoop()
+{
+    while(SDL_PollEvent(&EngineEvent))
+    {
+        switch(EngineEvent.type)
+        {
+            case SDL_QUIT:
+                Engine::End(0);
+        }
+    }
+    for(int i = 0; i < RigidbodyManger::bodies.size(); i++)
+    {
+        RigidbodyManger::bodies[i]->ent->rect.y+=RigidbodyManger::bodies[i]->Mass*RigidbodyManger::bodies[i]->Gravity;
+    }
 }
 
 void Engine::SetOverlayColor(SDL_Color cl)
