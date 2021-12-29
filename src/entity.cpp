@@ -10,6 +10,12 @@ void Entity::SetPosition(int x, int y)
     rect.y = y;
 }
 
+void Entity::SetSize(int w, int h)
+{
+    rect.w = w;
+    rect.h = h;
+}
+
 void Entity::Activate()
 {
     SDL_RenderCopy(Engine::Renderer, Texture, NULL, &rect);

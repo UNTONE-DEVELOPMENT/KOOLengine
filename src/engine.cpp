@@ -22,6 +22,7 @@ void Engine::Begin(std::string programName, int WindowWidth, int WindowHeight)
 
 void Engine::MainLoop()
 {
+    SDL_Rect inter;
     while(SDL_PollEvent(&EngineEvent))
     {
         switch(EngineEvent.type)
@@ -33,6 +34,34 @@ void Engine::MainLoop()
     for(int i = 0; i < RigidbodyManger::bodies.size(); i++)
     {
         RigidbodyManger::bodies[i]->ent->rect.y+=RigidbodyManger::bodies[i]->Mass*RigidbodyManger::bodies[i]->Gravity;
+    }
+    for(int i = 0; i < ColliderManager::colliders.size(); i++)
+    {
+        for(int j = 0; j < ColliderManager::colliders.size(); j++)
+        {
+            if(ColliderManager::colliders[i] != ColliderManager::colliders[j])
+            {
+                if(SDL_IntersectRect(&ColliderManager::colliders[i]->ent->rect, &ColliderManager::colliders[j]->ent->rect, &inter) == SDL_TRUE && ColliderManager::colliders[i]->ent->ID == 0)
+                {
+                    if(ColliderManager::colliders[i]->ent->rect.x > ColliderManager::colliders[j]->ent->rect.x) 
+                    {
+                        ColliderManager::colliders[i]->ent->rect.x+=inter.w;
+                    }
+                    else if(ColliderManager::colliders[i]->ent->rect.x < ColliderManager::colliders[j]->ent->rect.x)
+                    {
+                        ColliderManager::colliders[i]->ent->rect.x-=inter.w;
+                    }
+                    if(ColliderManager::colliders[i]->ent->rect.y > ColliderManager::colliders[j]->ent->rect.y)
+                    {
+                        ColliderManager::colliders[i]->ent->rect.y-=inter.h;
+                    }
+                    else if(ColliderManager::colliders[i]->ent->rect.y < ColliderManager::colliders[j]->ent->rect.y)
+                    {
+                        ColliderManager::colliders[i]->ent->rect.y-=inter.h;
+                    }
+                }
+            }
+        }
     }
 }
 

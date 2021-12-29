@@ -10,6 +10,7 @@ class Entity: public Component
 {
 public:
     void SetPosition(int x, int y);
+    void SetSize(int w, int h);
     SDL_Rect rect;
     SDL_Texture* Texture;
     void LoadTexture(std::string path);

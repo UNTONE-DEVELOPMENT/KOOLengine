@@ -19,6 +19,19 @@ public:
     Rigidbody(Entity* e, bool k, float m, float g);
 };
 
+class Collider: public Component
+{
+public:
+    Entity* ent;
+    Collider(Entity* e);
+};
+
+class ColliderManager
+{
+public:
+    static std::vector<Collider*> colliders;
+};
+
 class RigidbodyManger
 {
 public:
