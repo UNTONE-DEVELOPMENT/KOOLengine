@@ -12,6 +12,7 @@ public:
     static SDL_Renderer* Renderer;
     static SDL_Window* CurrentWindow;
     static SDL_Event EngineEvent;
+    static Uint64 deltaTime;
     static bool Done;
     static void FillScreen(SDL_Color cl);
     static void SetOverlayColor(SDL_Color cl);

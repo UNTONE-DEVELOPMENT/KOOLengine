@@ -13,12 +13,12 @@ int main(int argc, char** argv)
     ent.LoadTexture("mono.png");
     ent.SetPosition(100, 0);
     ent.SetSize(100, 100);
-    Rigidbody body(&ent, true, 1.0f, MASS_DEFAULT);
+    Rigidbody body(&ent, true, 1.0f, MASS_DEFAULT, VELOCITY_DEFAULT);
     Entity grnd;
     grnd.LoadTexture("bul.png");
     Collider col1(&ent);
     Collider col(&grnd);
-    grnd.SetPosition(100, 300);
+    grnd.SetPosition(100, 460);
     SDL_Color white = {255, 255, 255, 255};
     SDL_Color red = {255, 0, 0, 255};
     while(!Engine::Done)

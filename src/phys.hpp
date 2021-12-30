@@ -8,6 +8,13 @@
 #include <vector>
 
 #define MASS_DEFAULT 9.8f
+#define VELOCITY_DEFAULT 0
+#define METER_WINDOW_RATIO 100
+
+class Phys {
+public:
+    static float Meter();
+};
 
 class Rigidbody: public Component
 {
@@ -16,7 +23,8 @@ public:
     bool Kinematic;
     float Mass;
     float Gravity;
-    Rigidbody(Entity* e, bool k, float m, float g);
+    float Velocity;
+    Rigidbody(Entity* e, bool k, float m, float g, float v);
 };
 
 class Collider: public Component
@@ -32,7 +40,7 @@ public:
     static std::vector<Collider*> colliders;
 };
 
-class RigidbodyManger
+class RigidbodyManager
 {
 public:
     static std::vector<Rigidbody*> bodies;
