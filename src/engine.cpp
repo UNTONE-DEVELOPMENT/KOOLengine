@@ -10,6 +10,13 @@ SDL_Window* Engine::CurrentWindow;
 SDL_Event Engine::EngineEvent;
 bool Engine::Done;
 Uint64 Engine::deltaTime;
+Uint64 lastTick = 0;
+Uint64 delta = 0;
+Uint64 getTick = SDL_GetTicks64();
+
+int tick1 = SDL_GetTicks();
+int tick2;
+int fps;
 
 void Engine::Begin(std::string programName, int WindowWidth, int WindowHeight)
 {
@@ -23,12 +30,7 @@ void Engine::Begin(std::string programName, int WindowWidth, int WindowHeight)
 
 void Engine::MainLoop()
 {
-    int tick1 = SDL_GetTicks();
-    int tick2;
-    int fps;
-    Uint64 lastTick = 0;
-    Uint64 delta = 0;
-    Uint64 getTick = SDL_GetTicks64();
+    tick1 = SDL_GetTicks();
     SDL_Rect inter;
     while(SDL_PollEvent(&EngineEvent))
     {
@@ -40,8 +42,10 @@ void Engine::MainLoop()
     }
     for(int i = 0; i < RigidbodyManager::bodies.size(); i++)
     {
-        RigidbodyManager::bodies[i]->Velocity = RigidbodyManager::bodies[i]->Velocity + RigidbodyManager::bodies[i]->Gravity * 1/fps;
-        RigidbodyManager::bodies[i]->ent->rect.y = RigidbodyManager::bodies[i]->ent->rect.y + RigidbodyManager::bodies[i]->Velocity * 1/fps;
+        if(fps > 0) {
+            RigidbodyManager::bodies[i]->Velocity = RigidbodyManager::bodies[i]->Velocity + RigidbodyManager::bodies[i]->Gravity;
+            RigidbodyManager::bodies[i]->ent->rect.y = RigidbodyManager::bodies[i]->ent->rect.y + RigidbodyManager::bodies[i]->Velocity;
+        }
     }
     for(int i = 0; i < ColliderManager::colliders.size(); i++)
     {
@@ -76,10 +80,6 @@ void Engine::MainLoop()
             }
         }
     }    
-    deltaTime = getTick - lastTick;
-    lastTick = getTick;
-    tick2 = SDL_GetTicks()-tick1;
-    fps = (tick2 > 0) ? 1000.0f / tick2 : 0.0f;
 }
 
 void Engine::SetOverlayColor(SDL_Color cl)
@@ -109,4 +109,8 @@ int Engine::End(int code)
 void Engine::Tick()
 {
     SDL_RenderPresent(Renderer);
+    deltaTime = getTick - lastTick;
+    lastTick = getTick;
+    tick2 = SDL_GetTicks()-tick1;
+    fps = (tick2 > 0) ? 1000.0f / tick2 : 0.0f;
 }
