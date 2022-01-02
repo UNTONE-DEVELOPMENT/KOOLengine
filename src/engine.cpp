@@ -40,9 +40,13 @@ void Engine::MainLoop()
                 Engine::End(0);
         }
     }
+    for(int i = 0; i < EntityManager::entities.size(); i++)
+    {
+        SDL_RenderCopy(Renderer, EntityManager::entities[i]->Texture, NULL, &EntityManager::entities[i]->rect);
+    }
     for(int i = 0; i < RigidbodyManager::bodies.size(); i++)
     {
-        if(fps > 0) {
+        if(fps > 0 && RigidbodyManager::bodies[i]->Kinematic == false) {
             RigidbodyManager::bodies[i]->Velocity = RigidbodyManager::bodies[i]->Velocity + RigidbodyManager::bodies[i]->Gravity;
             RigidbodyManager::bodies[i]->ent->rect.y = RigidbodyManager::bodies[i]->ent->rect.y + RigidbodyManager::bodies[i]->Velocity;
         }

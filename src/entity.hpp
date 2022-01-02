@@ -15,6 +15,12 @@ public:
     SDL_Texture* Texture;
     void LoadTexture(std::string path);
     SDL_Texture* animation(std::vector<std::string> paths);
-    void Activate();
     void Destroy();
+    Entity(void);
+};
+
+class EntityManager
+{
+public:
+    static std::vector<Entity*> entities;
 };

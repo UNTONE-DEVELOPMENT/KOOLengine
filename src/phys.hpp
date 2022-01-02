@@ -24,6 +24,7 @@ public:
     float Mass;
     float Gravity;
     float Velocity;
+    void Destroy();
     Rigidbody(Entity* e, bool k, float m, float g, float v);
 };
 
@@ -31,6 +32,7 @@ class Collider: public Component
 {
 public:
     Entity* ent;
+    void Destroy();
     Collider(Entity* e);
 };
 

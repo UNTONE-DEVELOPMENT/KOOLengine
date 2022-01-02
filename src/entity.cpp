@@ -4,6 +4,8 @@
 #include "entity.hpp"
 #include "engine.hpp"
 
+std::vector<Entity*> EntityManager::entities;
+
 void Entity::SetPosition(int x, int y)
 {
     rect.x = x;
@@ -14,15 +16,11 @@ void Entity::SetSize(int w, int h)
 {
     rect.w = w;
     rect.h = h;
-}
-
-void Entity::Activate()
-{
-    SDL_RenderCopy(Engine::Renderer, Texture, NULL, &rect);
-}
+}   
 
 void Entity::Destroy()
 {
+    EntityManager::entities.erase(std::remove(EntityManager::entities.begin(), EntityManager::entities.end(), this), EntityManager::entities.end());
     delete this;
 }
 
@@ -49,4 +47,10 @@ void Entity::LoadTexture(std::string path)
 SDL_Texture* Entity::animation(std::vector<std::string> paths)
 {
     throw std::runtime_error("Not implemented");
+}
+
+Entity::Entity(void)
+{
+    std::cout << "added entity" << std::endl;
+    EntityManager::entities.push_back(this);
 }

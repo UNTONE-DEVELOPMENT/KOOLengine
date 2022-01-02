@@ -28,8 +28,20 @@ Rigidbody::Rigidbody(Entity* e, bool k, float m, float g, float v)
     RigidbodyManager::bodies.push_back(this);
 }
 
+void Rigidbody::Destroy()
+{
+    RigidbodyManager::bodies.erase(std::remove(RigidbodyManager::bodies.begin(), RigidbodyManager::bodies.end(), this), RigidbodyManager::bodies.end());
+    delete this;
+}
+
 Collider::Collider(Entity* e)
 {
     ent = e;
     ColliderManager::colliders.push_back(this);
+}
+
+void Collider::Destroy()
+{
+    ColliderManager::colliders.erase(std::remove(ColliderManager::colliders.begin(), ColliderManager::colliders.end(), this), ColliderManager::colliders.end());
+    delete this;
 }
