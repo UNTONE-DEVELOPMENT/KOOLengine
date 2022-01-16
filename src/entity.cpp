@@ -44,9 +44,27 @@ void Entity::LoadTexture(std::string path)
     }
 }
 
-SDL_Texture* Entity::animation(std::vector<std::string> paths)
+void Entity::LoadTextureArray(std::vector<std::string> paths)
 {
-    throw std::runtime_error("Not implemented");
+    for(int i = 0; i < paths.size(); i++)
+    {
+        SDL_Surface* s = IMG_Load(paths[i].c_str());
+        if(s)
+        {
+            SDL_Texture* tex = SDL_CreateTextureFromSurface(Engine::Renderer, s);
+            SDL_Rect r = {rect.x, rect.y, s->w, s->h};
+            AnimationFrames.push_back(tex);
+            AnimationRects.push_back(r);
+            SDL_FreeSurface(s);
+        }
+        else
+        {
+            SDL_FreeSurface(s);
+            char er[1000];
+            sprintf(er, "Could not load texture from %s", paths[i].c_str());
+            throw std::runtime_error(er);
+        }
+    }
 }
 
 Entity::Entity(void)

@@ -13,8 +13,10 @@ public:
     void SetSize(int w, int h);
     SDL_Rect rect;
     SDL_Texture* Texture;
+    std::vector<SDL_Rect> AnimationRects;
+    std::vector<SDL_Texture*> AnimationFrames;
     void LoadTexture(std::string path);
-    SDL_Texture* animation(std::vector<std::string> paths);
+    void LoadTextureArray(std::vector<std::string> paths);
     void Destroy();
     Entity(void);
 };

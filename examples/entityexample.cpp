@@ -2,6 +2,7 @@
 #include <KOOLengine/engine.hpp>
 #include <KOOLengine/entity.hpp>
 #include <KOOLengine/phys.hpp>
+#include <KOOLengine/animation.hpp>
 
 int main(int argc, char** argv)
 {
@@ -13,6 +14,7 @@ int main(int argc, char** argv)
     ent.SetSize(100, 100);
     ent.ID = 0;
     Rigidbody body(&ent, false, 1.0f, MASS_DEFAULT, VELOCITY_DEFAULT);
+    body.Kinematic = true;
     Entity grnd;
     grnd.LoadTexture("bul.png");
     Collider col1(&ent);
@@ -20,11 +22,19 @@ int main(int argc, char** argv)
     grnd.SetPosition(100, 400);
     SDL_Color white = {255, 255, 255, 255};
     SDL_Color red = {255, 0, 0, 255};
+    Animation an(&ent);
+    std::vector<std::string> frames;
+    for(int i = 0; i < 4; i++)
+    {
+        frames.push_back("mono.png");
+    }
+    ent.LoadTextureArray(frames); 
     while(!Engine::Done)
     {
         Engine::FillScreen(white);
         Engine::SetOverlayColor(red);
         Engine::MainLoop();
+        an.Scatter(1.0f, 1.0f);
         Engine::Tick();
     }
 }

@@ -4,6 +4,7 @@
 #include "engine.hpp"
 #include "phys.hpp"
 #include <vector>
+#include "scene.hpp"
 
 SDL_Renderer* Engine::Renderer;
 SDL_Window* Engine::CurrentWindow;
