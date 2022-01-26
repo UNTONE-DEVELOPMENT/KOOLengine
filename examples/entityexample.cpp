@@ -14,7 +14,7 @@ int main(int argc, char** argv)
     ent.SetSize(100, 100);
     ent.ID = 0;
     Rigidbody body(&ent, false, 1.0f, MASS_DEFAULT, VELOCITY_DEFAULT);
-    body.Kinematic = true;
+    body.Kinematic = false;
     Entity grnd;
     grnd.LoadTexture("bul.png");
     Collider col1(&ent);
@@ -34,7 +34,6 @@ int main(int argc, char** argv)
         Engine::FillScreen(white);
         Engine::SetOverlayColor(red);
         Engine::MainLoop();
-        an.Scatter(1.0f, 1.0f);
         Engine::Tick();
     }
 }
