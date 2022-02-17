@@ -1,4 +1,5 @@
 #include <iostream>
+#define SDL_MAIN_HANDLED
 #include <KOOLengine/engine.hpp>
 #include <KOOLengine/entity.hpp>
 #include <KOOLengine/phys.hpp>

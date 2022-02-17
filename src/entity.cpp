@@ -3,6 +3,7 @@
 #include "component.hpp"
 #include "entity.hpp"
 #include "engine.hpp"
+#include <algorithm>
 
 std::vector<Entity*> EntityManager::entities;
 

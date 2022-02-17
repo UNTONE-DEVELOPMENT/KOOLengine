@@ -6,6 +6,7 @@
 #include "entity.hpp"
 #include <vector>
 #include "phys.hpp"
+#include <algorithm>
 
 std::vector<Rigidbody*> RigidbodyManager::bodies;
 std::vector<Collider*> ColliderManager::colliders;

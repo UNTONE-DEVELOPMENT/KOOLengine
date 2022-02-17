@@ -1,10 +1,12 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 #include "engine.hpp"
 #include "phys.hpp"
 #include <vector>
 #include "scene.hpp"
+#include "sound.hpp"
 
 SDL_Renderer* Engine::Renderer;
 SDL_Window* Engine::CurrentWindow;
@@ -25,6 +27,7 @@ void Engine::Begin(std::string programName, int WindowWidth, int WindowHeight)
     std::cout << "Starting KOOLengine..." << std::endl;
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
     IMG_Init(IMG_INIT_PNG);
+    Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096);
     CurrentWindow = SDL_CreateWindow(programName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WindowWidth, WindowHeight, 0);
     Renderer = SDL_CreateRenderer(CurrentWindow, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
@@ -78,8 +81,8 @@ void Engine::MainLoop()
                     }
                     try {
                         RigidbodyManager::bodies[i]->Velocity = 0;
-                    } catch(std::exception) {
-                        //collider has no rigidbody attached
+                    } catch(std::exception& e) {
+                        std::cout << "KOOLengine: tried to stop velocity, but entity didn't have a rigidbody component attached." << std::endl;
                     }
                 }
             }
@@ -106,8 +109,13 @@ void Engine::FillScreen(SDL_Color cl)
 int Engine::End(int code)
 {
     Done = true;
-    SDL_Quit();
+    for(auto& mixes : SoundManager::sources)
+    {
+        Mix_FreeChunk(mixes.src);
+    }
     IMG_Quit();
+    Mix_CloseAudio();
+    SDL_Quit();
     return code;
 }
 

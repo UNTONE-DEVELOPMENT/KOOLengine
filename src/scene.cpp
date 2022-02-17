@@ -6,6 +6,8 @@
 #include "entity.hpp"
 #include "phys.hpp"
 #include "scene.hpp"
+#include <algorithm>
+
 
 std::vector<Scene> SceneManager::loadedScenes;
 Scene SceneManager::currentScene;
