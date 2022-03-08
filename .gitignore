@@ -1,3 +1,6 @@
 /engine
 /engine.dSYM
 /.vscode
+/*.o
+/*.dll
+/*.so

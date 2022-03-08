@@ -33,6 +33,7 @@ class Collider: public Component
 public:
     Entity* ent;
     void Destroy();
+    bool isColliding;
     Collider(Entity* e);
 };
 

@@ -46,7 +46,10 @@ void Engine::MainLoop()
     }
     for(int i = 0; i < EntityManager::entities.size(); i++)
     {
-        SDL_RenderCopy(Renderer, EntityManager::entities[i]->Texture, NULL, &EntityManager::entities[i]->rect);
+        if(EntityManager::entities[i]->Texture)
+        {
+            SDL_RenderCopy(Renderer, EntityManager::entities[i]->Texture, NULL, &EntityManager::entities[i]->rect);
+        }
     }
     for(int i = 0; i < RigidbodyManager::bodies.size(); i++)
     {
@@ -61,16 +64,10 @@ void Engine::MainLoop()
         {
             if(ColliderManager::colliders[i] != ColliderManager::colliders[j])
             {
-                if(SDL_IntersectRect(&ColliderManager::colliders[i]->ent->rect, &ColliderManager::colliders[j]->ent->rect, &inter) == SDL_TRUE && ColliderManager::colliders[i]->ent->ID == 0)
+                if(SDL_IntersectRect(&ColliderManager::colliders[i]->ent->rect, &ColliderManager::colliders[j]->ent->rect, &inter) == SDL_TRUE)
                 {
-                    if(ColliderManager::colliders[i]->ent->rect.x > ColliderManager::colliders[j]->ent->rect.x) 
-                    {
-                        ColliderManager::colliders[i]->ent->rect.x+=inter.w;
-                    }
-                    else if(ColliderManager::colliders[i]->ent->rect.x < ColliderManager::colliders[j]->ent->rect.x)
-                    {
-                        ColliderManager::colliders[i]->ent->rect.x-=inter.w;
-                    }
+                    ColliderManager::colliders[i]->isColliding = true;
+                    ColliderManager::colliders[j]->isColliding = true;
                     if(ColliderManager::colliders[i]->ent->rect.y > ColliderManager::colliders[j]->ent->rect.y)
                     {
                         ColliderManager::colliders[i]->ent->rect.y-=inter.h;
@@ -79,11 +76,52 @@ void Engine::MainLoop()
                     {
                         ColliderManager::colliders[i]->ent->rect.y-=inter.h;
                     }
+                    else if(ColliderManager::colliders[i]->ent->rect.x > ColliderManager::colliders[j]->ent->rect.x) 
+                    {
+                        try
+                        {
+                            if(RigidbodyManager::bodies[j]->Kinematic)
+                            {
+                                ColliderManager::colliders[i]->ent->rect.x+=inter.w;
+                            }
+                            else
+                            {
+                                ColliderManager::colliders[j]->ent->rect.x-=inter.w;
+                            }
+                        }
+                        catch(const std::exception& e)
+                        {
+                            ColliderManager::colliders[i]->ent->rect.x+=inter.w;
+                        }
+                    }
+                    else if(ColliderManager::colliders[i]->ent->rect.x < ColliderManager::colliders[j]->ent->rect.x)
+                    {
+                        try
+                        {
+                            if(RigidbodyManager::bodies[j]->Kinematic)
+                            {
+                                ColliderManager::colliders[i]->ent->rect.x-=inter.w;
+                            }
+                            else
+                            {
+                                ColliderManager::colliders[j]->ent->rect.x+=inter.w;
+                            }
+                        }
+                        catch(const std::exception& e)
+                        {
+                            ColliderManager::colliders[i]->ent->rect.x-=inter.w;
+                        }
+                    }
                     try {
                         RigidbodyManager::bodies[i]->Velocity = 0;
                     } catch(std::exception& e) {
                         std::cout << "KOOLengine: tried to stop velocity, but entity didn't have a rigidbody component attached." << std::endl;
                     }
+                }
+                else
+                {
+                    ColliderManager::colliders[i]->isColliding = false;
+                    ColliderManager::colliders[j]->isColliding = false;
                 }
             }
         }

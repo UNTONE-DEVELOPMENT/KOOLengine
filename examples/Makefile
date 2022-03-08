@@ -10,3 +10,4 @@ mingw64:
 	$(LXX) -std=c++17 -o scene_test scenetest.cpp $(MINGW64_LFLAGS)
 	$(LXX) -std=c++17 -o entity_scene scenent.cpp $(MINGW64_LFLAGS) -lSDL2
 	$(LXX) -std=c++17 -o sound_check soundchk.cpp $(MINGW64_LFLAGS) -lSDL2
+	$(LXX) -std=c++17 -o bouncer bouncer.cpp $(MINGW64_LFLAGS) -lSDL2

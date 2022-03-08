@@ -17,11 +17,10 @@ int main(int argc, char** argv)
         {
             Engine::FillScreen(white);
             Engine::MainLoop();
-            SDL_Delay(10000);
-            SoundManager::StopMix("test_sequence");
-            Engine::End(0);
             Engine::Tick();
         }
+        SoundManager::StopMix("test_sequence");
+        Engine::End(0);
     }};
     SceneManager::AddScene(chk);
     SceneManager::LoadScene("chk");
