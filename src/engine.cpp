@@ -15,7 +15,7 @@ bool Engine::Done;
 Uint64 Engine::deltaTime;
 Uint64 lastTick = 0;
 Uint64 delta = 0;
-Uint64 getTick = SDL_GetTicks64();
+Uint32 getTick = SDL_GetTicks();
 
 int tick1 = SDL_GetTicks();
 int tick2;
