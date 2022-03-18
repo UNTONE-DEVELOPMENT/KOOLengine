@@ -37,6 +37,16 @@ public:
     Collider(Entity* e);
 };
 
+class Thermo: public Component
+{
+public:
+    Entity* ent;
+    float temp_abs;
+    float wein();
+    void Destroy();
+    Thermo(Entity* e);
+};
+
 class ColliderManager
 {
 public:
@@ -47,4 +57,10 @@ class RigidbodyManager
 {
 public:
     static std::vector<Rigidbody*> bodies;
+};
+
+class ThermoManager
+{
+public:
+    static std::vector<Thermo*> thermos;
 };

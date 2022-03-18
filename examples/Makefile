@@ -1,5 +1,5 @@
 LXX = g++
-MINGW64_LFLAGS = C:/msys64/usr/lib/libkoolengine.dll
+MINGW64_LFLAGS = C:/msys64/mingw64/lib/libkoolengine.dll
 
 all:
 	$(LXX) -std=c++17 -o entity_example entityexample.cpp -lkoolengine

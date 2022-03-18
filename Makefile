@@ -21,11 +21,12 @@ install: entity
 	find ./src -name "*.hpp" -exec cp -r {} $(LOCAL)include/KOOLengine/ \;
 	cp libkoolengine.so $(LOCAL)lib/
 
-install_mingw64: entity_rpi
+install_mingw64: entity
 	$(LXX) $(LCFLAGS) -shared -o libkoolengine.dll *.o $(LLFLAGS) -Wl,-Bstatic
 	rm -rf $(MINGW64)include/KOOLengine/
 	mkdir $(MINGW64)include/KOOLengine/
 	$(FIND_MGW) ./src -name "*.hpp" -exec cp -r {} $(MINGW64)include/KOOLengine/ \;
+	rm -rf $(MINGW64)lib/libkoolengine.dll
 	cp libkoolengine.dll $(MINGW64)lib/
 
 install_rpi: 

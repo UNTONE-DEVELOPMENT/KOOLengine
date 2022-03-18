@@ -20,22 +20,25 @@ int main(int argc, char** argv)
         Entity ball1;
         ball1.LoadTexture("ball.png");
         ball1.SetPosition(100, 100);
-        ball1.SetSize(40, 40);
-        Entity ball2;
-        ball2.LoadTexture("ball1.png");
-        ball2.SetPosition(200, 100);
-        ball2.SetSize(40, 40);
+        ball1.SetSize(100, 100);
         Rigidbody body1(&ball1, false, 1.0f, 1.0f, VELOCITY_DEFAULT);
-        Rigidbody body2(&ball2, false, 1.0f, 1.0f, VELOCITY_DEFAULT);
         Collider col1(&ball1);
-        Collider col2(&ball2);
-        ball1.ID = 0;
-        ball2.ID = 0;
+        Thermo th1(&ball1);
+        th1.temp_abs = 1;
+        ball1.ID = 273;
         Collider col3(&ground);
         int index = 0;
         bool movingLeft = false;
         bool movingRight = false;
         bool jumping = false;
+        Entity waves;
+        waves.LoadTexture("waves.png");
+        waves.SetSize(370, 39);
+        waves.SetPosition(400/2-370/2, 320);
+        Entity tick;
+        tick.LoadTexture("tick.png");
+        tick.SetSize(5, 39);
+        tick.SetPosition(waves.rect.x, waves.rect.y);
         while(!Engine::Done)
         {
             Engine::FillScreen(white);
@@ -75,18 +78,31 @@ int main(int argc, char** argv)
                         Engine::End(0);
                 }
             }
+            float w = th1.wein();
             if(movingLeft)
             {
-                ball1.rect.x-=5.0f;
+                if(tick.rect.x > waves.rect.x)
+                {
+                    th1.temp_abs-=1;
+                    tick.rect.x-=1;
+                    std::cout << std::scientific << w << std::endl;
+                    //ball1.rect.x-=5.0f;
+                }
             }
             else if(movingRight)
             {
-                ball1.rect.x+=5.0f;
+                if(tick.rect.x < waves.rect.x + waves.rect.w)
+                {
+                    th1.temp_abs+=1;
+                    tick.rect.x+=1;
+                    std::cout << std::scientific << w << std::endl;
+                    //ball1.rect.x+=5.0f;
+                }
             }
             if(jumping)
             {
-                body1.Kinematic = true;
-                ball1.rect.y-=10.0f;
+                //body1.Kinematic = true;
+                //ball1.rect.y-=10.0f;
             }
             else if(!jumping)
             {
@@ -94,6 +110,50 @@ int main(int argc, char** argv)
                 body1.Kinematic = false;
             }
             Engine::MainLoop();
+            if(tick.rect.x >= 159 && tick.rect.x <= 160)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 255, 0, 0);
+            }
+            else if(tick.rect.x >= 158 && tick.rect.x <= 159)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 255, 61, 0);
+            }
+            else if(tick.rect.x >= 157 && tick.rect.x <= 158)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 255, 241, 0);
+            }
+            else if(tick.rect.x >= 156 && tick.rect.x <= 157)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 0, 255, 0);
+            }
+            else if(tick.rect.x >= 155 && tick.rect.x <= 156)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 0, 255, 211);
+            }
+            else if(tick.rect.x >= 154 && tick.rect.x <= 155)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 0, 185, 255);
+            }
+            else if(tick.rect.x >= 153 && tick.rect.x <= 154)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 0, 107, 255);
+            }
+            else if(tick.rect.x >= 152 && tick.rect.x <= 153)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 0, 0, 255);
+            }
+            else if(tick.rect.x >= 151 && tick.rect.x <= 152)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 139, 0, 211);
+            }
+            else if(tick.rect.x >= 150 && tick.rect.x <= 151)
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 181, 0, 211);
+            }
+            else
+            {
+                SDL_SetTextureColorMod(ball1.Texture, 255, 255, 255);
+            }
             Engine::Tick();
         }
         Engine::End(0);

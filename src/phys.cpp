@@ -10,6 +10,7 @@
 
 std::vector<Rigidbody*> RigidbodyManager::bodies;
 std::vector<Collider*> ColliderManager::colliders;
+std::vector<Thermo*> ThermoManager::thermos;
 
 float Phys::Meter()
 {
@@ -45,4 +46,24 @@ void Collider::Destroy()
 {
     ColliderManager::colliders.erase(std::remove(ColliderManager::colliders.begin(), ColliderManager::colliders.end(), this), ColliderManager::colliders.end());
     delete this;
+}
+
+void Thermo::Destroy()
+{
+    ThermoManager::thermos.erase(std::remove(ThermoManager::thermos.begin(), ThermoManager::thermos.end(), this), ThermoManager::thermos.end());
+    delete this;
+}
+
+Thermo::Thermo(Entity* e)
+{
+    ent = e;
+    ThermoManager::thermos.push_back(this);
+}
+
+float Thermo::wein()
+{
+    const float b = 2.89f*pow(10, -3);
+    float wein = b/temp_abs;
+    
+    return wein;
 }
