@@ -18,4 +18,4 @@ m1:
 	$(LXX) -I/opt/homebrew/include/ -std=c++17 -o scene_test scenetest.cpp -L/opt/homebrew/lib -lkoolengine
 	$(LXX) -I/opt/homebrew/include/ -std=c++17 -o entity_scene scenent.cpp -L/opt/homebrew/lib -lkoolengine -lSDL2
 	$(LXX) -I/opt/homebrew/include/ -std=c++17 -o sound_check soundchk.cpp -L/opt/homebrew/lib -lkoolengine -lSDL2
-	$(LXX) -I/opt/homebrew/include/ -std=c++17 -o bouncer bouncer.cpp -L/opt/homebrew/lib -lkoolengine -lSDL2
+	$(LXX) -I/opt/homebrew/include/ -std=c++17 -o bouncer bouncer.cpp -L/opt/homebrew/lib -lkoolengine -lSDL2 -lSDL2_ttf
