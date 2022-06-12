@@ -1,45 +1,44 @@
-LCC = gcc
-LXX = g++
-LCFLAGS = -g -w -std=c++17 $(shell pkg-config --cflags sdl2) $(shell pkg-config --cflags sdl2_image)
-LLFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer
-LOCAL = /usr/local/
-MINGW64 = C:/msys64/mingw64/
-FIND_MGW = C:/msys64/usr/bin/find.exe
+.PHONY: all clean install
 
-entity:
-	$(LXX) -c src/*.cpp $(LCFLAGS) $(LLFLAGS)
+CC			:= g++
+CFLAGS		:= -g -w -std=c++17
+LDFLAGS		:= $(shell pkg-config sdl2_mixer sdl2 sdl2_ttf sdl2_image --libs)
+SOURCEDIR	:= src/
+CXXFILES	:= $(wildcard $(SOURCEDIR)*.cpp)
+OBJS		:= $(CXXFILES:.cpp=.o)
+TARGET		:= libkoolengine.so
 
-entity_rpi:
-	$(LXX) -fPIC -c src/*.cpp $(LCFLAGS) $(LLFLAGS)	
+LOCAL		:= /usr/local/
 
-m1:
-	$(LXX) -I/opt/homebrew/include/ -g -w -std=c++17 -c src/*.cpp $(shell pkg-config sdl2 --libs) $(shell 	pkg-config sdl2_image --libs)
+# needed to install on windows
 
-install: entity
-	$(LXX) -shared -o libkoolengine.so *.o $(LCFLAGS) $(LLFLAGS)
-	mkdir -p $(LOCAL)include/KOOLengine/
-	find ./src -name "*.hpp" -exec cp -r {} $(LOCAL)include/KOOLengine/ \;
-	cp libkoolengine.so $(LOCAL)lib/
+MINGW64 	:= C:/msys64/mingw64/
+FIND_MGW 	:= C:/msys64/usr/bin/find.exe
 
-install_m1: m1
-	$(LXX) -shared -o libkoolengine.so *.o $(shell pkg-config sdl2 --libs) $(shell pkg-config sdl2_image --libs) $(shell pkg-config sdl2_mixer --libs)
-	mkdir -p /opt/homebrew/include/KOOLengine/
-	find ./src -name "*.hpp" -exec cp -r {} /opt/homebrew/include/KOOLengine/ \;
-	cp libkoolengine.so /opt/homebrew/lib/
+ifeq ($(platform),windows)
+install:: all
+	@rm -rf $(MINGW64)include/KOOLengine/
+	@mkdir $(MINGW64)include/KOOLengine/
+	@$(FIND_MGW) $(SOURCEDIR) -name "*.hpp" -exec cp -r {} $(MINGW64)include/KOOLengine/ \;
+	@rm -rf $(MINGW64)lib/libkoolengine.dll
+	@cp libkoolengine.dll $(MINGW64)lib/
+else
+install:: all
+	@mkdir -p $(LOCAL)include/KOOLengine/
+	@find $(SOURCEDIR) -name "*.hpp" -exec cp -r {} $(LOCAL)include/KOOLengine/ \;
+	@cp libkoolengine.so $(LOCAL)lib/
+endif
 
-install_mingw64: entity
-	$(LXX) -I/opt/homebrew/include/ -g -w -std=c++17 -shared -o libkoolengine.dll *.o $(LLFLAGS) -Wl,-Bstatic
-	rm -rf $(MINGW64)include/KOOLengine/
-	mkdir $(MINGW64)include/KOOLengine/
-	$(FIND_MGW) ./src -name "*.hpp" -exec cp -r {} $(MINGW64)include/KOOLengine/ \;
-	rm -rf $(MINGW64)lib/libkoolengine.dll
-	cp libkoolengine.dll $(MINGW64)lib/
+all: $(TARGET)
 
-install_rpi: 
-	$(LXX) -fPIC -shared -o libkoolengine.so *.o $(LCFLAGS) $(LLFLAGS)
-	mkdir -p $(LOCAL)include/KOOLengine/
-	find ./src -name "*.hpp" -exec cp -r {} $(LOCAL)include/KOOLengine/ \;
-	cp libkoolengine.so $(LOCAL)lib/
+$(TARGET): $(OBJS)
+	@echo "Linking objs..."
+	@$(CC) $(CFLAGS) -shared -o $@ $^ $(LDFLAGS)
+
+$(SOURCEDIR)%.o: $(SOURCEDIR)%.cpp
+	@echo "Compiling obj" $<
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -rf *.so *.o *.dll
+	@echo "Cleaning up objects"
+	@rm -rf $(SOURCEDIR)*.o *.so
